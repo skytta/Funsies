@@ -1,0 +1,59 @@
+---
+title: "Markdown2"
+author: "Jenny Skytta"
+date: "03/15/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(dplyr)
+library(knitr)
+```
+
+# This is an analysis of breakfast cereals
+
+```{r}
+dataframe <- read.csv("balkdjf;akldfj", stringsAsFactors = FALSE)
+
+sugars_by_mfr <- cereal %>% 
+  group_by(mfr) %>% 
+  summarize(mean_sugars = mean(sugars), .groups = 'drop')
+
+highest_sugars <- cereal %>%  
+  filter(sugars == max(sugars)) %>% 
+  pull(name)
+
+lowestt_sugars <- cereal %>%  
+  filter(sugars == min(sugars)) %>% 
+  pull(name)
+
+top_five <- cereal %>% 
+  select(name, sugars) %>% 
+  arrange(-sugars) %>% 
+  top_n(5, sugars)
+```
+
+## Highest/lowest sugars
+We found that the cereals with the highest sugars were `r highest_sugars`. Meanwhile the cereals with the lowest amount of sugars was `r lowest_sugars`. This is a table with the top five most sugary cereals:
+
+```{r echo = FALSE}
+kable(top_five)
+```
+
+## Rating vs. Sugars
+This is a plot that shows the relationship between sugars and rating of the cereal.  We see tehre is a negative correlation. 
+
+```{r echo = FALSE}
+plot1 <- ggplot(data = cereal)  +
+  geom_point(mapping = aes(x = rating, y = sugars, color = mfr), alpha = 0.5)
+  xlab("Rating") +
+  ylab("Sugars(g)") +
+  ggitle("Rating vs. sugars for cerals") +
+    scale_fill_brewer(palette = "Dark2", name = "Manufacturer")
+
+show(plot1)
+
+```
+

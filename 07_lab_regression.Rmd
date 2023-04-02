@@ -1,0 +1,94 @@
+---
+title: 'IMT 573: Module 7 Lab'
+subtitle: 'Regression'
+author: "YOUR NAME HERE"
+date: 'Due: August 06, 2021'
+output: 
+  pdf_document:
+    includes:
+      in_header: "preamble.tex"
+---
+
+<!-- This syntax can be used to add comments to a markdown file that are ignored during knitting process. -->
+##### Collaborators: <!-- BE SURE TO LIST ALL COLLABORATORS HERE! -->
+
+List collaborators here.
+
+### Objectives
+
+Regression is one of the fundamental and important data models we will encounter in this course. Our aim in this exercise is to see regression models in practice. Recall, our emphasis in class and here will also be on interpreting the results of these models in context, and always to evaluate the assumptions of the model to ensure valid and accurate statistical inference. 
+
+### Instructions
+
+Before beginning this assignment, please ensure you have access to R and RStudio; this can be on your own personal computer or on the IMT 573 R Studio Cloud. 
+
+1. Open the `07_lab_regression.Rmd` and save a copy to your local directory. Supply your solutions to the assignment by editing `07_lab_regression.Rmd`. 
+
+2. First, replace the "YOUR NAME HERE" text in the `author:` field with your own full name. Any collaborators must be listed on the top of your assignment. 
+
+3. Be sure to include well-documented (e.g. commented) code chucks, figures, and clearly written text chunk explanations as necessary. Any figures should be clearly labeled and appropriately referenced within the text. Be sure that each visualization adds value to your written explanation; avoid redundancy -- you do no need four different visualizations of the same pattern.
+
+4.  Collaboration on problem sets is fun and useful, and I encourage it, but each student must turn in an individual write-up in their own words as well as code/work that is their own.  Regardless of whether you work with others, what you turn in must be your own work; this includes code and interpretation of results. The names of all collaborators must be listed on each assignment. Do not copy-and-paste from other students' responses or code.
+
+5. All materials and resources that you use (with the exception of lecture slides) must be appropriately referenced within your assignment.  
+
+6. When you have completed the assignment and have **checked** that your code both runs in the Console and knits correctly when you click `Knit`. When the PDF report is generated rename the knitted PDF file to `lab7_YourLastName_YourFirstName.pdf`, and submit the PDF file on Canvas.
+
+In this lab you will need, at minimum, the following R packages.
+
+```{r Setup, message=FALSE}
+# Load standard libraries
+library(tidyverse)
+library(knitr) # this will keep code on the page!
+opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
+```
+
+### Sports Statistics: Predicting Runs Scored in Baseball
+
+Baseball is a played between two teams who take turns batting and fielding. A run is scored when a player advances around the bases and returns to home plate. The data we will use today is from all 30 Major League Baseball teams from the 2011 season. This data set is useful for examining the relationships between wins, runs scored in a season, and a number of other player statistics.
+
+\textcolor{blue}{Note: More info on the data can be found here: https://www.openintro.org/stat/data/mlb11.php}
+
+```{r setup, message=FALSE}
+# Download and load data
+download.file("http://www.openintro.org/stat/data/mlb11.RData", destfile = "data/mlb11.RData")
+load("data/mlb11.RData")
+```
+
+Use the baseball data to answer the following questions:
+
+* Plot the relationship between runs and at bats. Does the relationship look linear? Describe the relationship between these two variables.
+
+```{r}
+# Simple plot of data
+plot(mlb11$at_bats, mlb11$runs)
+```
+
+* If you knew a team's at bats, would you be comfortable using a linear model to predict the number of runs?
+
+* If the relationship looks linear, quantify the strength of the relationship with the correlation coefficient. Discuss what you find.
+
+```{r}
+# Compute correlation
+cor(mlb11$runs, mlb11$at_bats)
+```
+
+* Use the `lm()` function to fit a simple linear model for runs as a function of at bats. Write down the formula for the model, filling in estimated coefficient values.
+
+```{r}
+# Fit a simple linear model
+m1 <- lm(runs ~ at_bats, data = mlb11)
+summary(m1)
+```
+
+* Describe in words the interpretation of $\beta_1$.
+
+* Make a plot of the residuals versus at bats. Is there any apparent pattern in the residuals plot?
+
+```{r}
+# Plot residuals
+plot(m1$residuals ~ mlb11$at_bats)
+plot(m1)
+```
+
+* Comment of the fit of the model.

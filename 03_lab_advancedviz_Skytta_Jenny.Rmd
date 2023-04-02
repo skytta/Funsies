@@ -1,0 +1,163 @@
+---
+title: 'IMT 573: Module 3 Lab'
+subtitle: 'Advanced Visualization'
+author: "Jenny Skytta"
+date: 'Due: April 18, 2022'
+output: 
+  pdf_document:
+    includes:
+      in_header: "preamble.tex"
+---
+
+<!-- This syntax can be used to add comments to a markdown file that are ignored during knitting process. -->
+##### Collaborators: 
+
+_Independent work_
+
+### Objectives
+
+As we continue our data science journey, we are gaining skills in working with data. This might be reflected in more efficient ways to manipulate and summarize data, both of which can be useful for creating more advanced visualizations of that data. To accomplish many of the visualization tasks in these exercises you will need to make use of newly acquired data manipulation skills!
+
+### Instructions
+
+Before beginning this assignment, please ensure you have access to R and RStudio; this can be on your own personal computer or on the IMT 573 R Studio Cloud. 
+
+1. Open the `03_lab_advancedviz.Rmd` and save a copy to your local directory. Supply your solutions to the assignment by editing `03_lab_advancedviz.Rmd`. 
+
+2. First, replace the "YOUR NAME HERE" text in the `author:` field with your own full name. Any collaborators must be listed on the top of your assignment. 
+
+3. Be sure to include well-documented (e.g. commented) code chucks, figures, and clearly written text chunk explanations as necessary. Any figures should be clearly labeled and appropriately referenced within the text. Be sure that each visualization adds value to your written explanation; avoid redundancy -- you do no need four different visualizations of the same pattern.
+
+4.  Collaboration on problem sets is fun and useful, and I encourage it, but each student must turn in an individual write-up in their own words as well as code/work that is their own.  Regardless of whether you work with others, what you turn in must be your own work; this includes code and interpretation of results. The names of all collaborators must be listed on each assignment. Do not copy-and-paste from other students' responses or code.
+
+5. All materials and resources that you use (with the exception of lecture slides) must be appropriately referenced within your assignment.  
+
+6. When you have completed the assignment and have **checked** that your code both runs in the Console and knits correctly when you click `Knit`. When the PDF report is generated rename the knitted PDF file to `lab3_YourLastName_YourFirstName.pdf`, and submit the PDF file on Canvas.
+
+### Setup
+
+In this lab you will need, at minimum, the following R packages.
+
+```{r Setup, message=FALSE}
+
+library(tidyverse) 
+install.packages("maps")
+library(maps)
+
+```
+
+The data we will use in this lab comes from the Million Song Dataset. The Million Song Dataset is a collaboration between the Echo Nest and LabROSA, a laboratory working towards intelligent machine listening. The project was also funded in part by the National Science Foundation of America (NSF) to provide a large data set to evaluate research related to algorithms and information retrieval. 
+
+[http://millionsongdataset.com/](You can find out more information about the dataset here.)
+
+Thierry Bertin-Mahieux, Daniel P.W. Ellis, Brian Whitman, and Paul Lamere. The Million Song Dataset. In Proceedings of the 12th International Society for Music Information Retrieval Conference (ISMIR 2011), 2011.
+
+We will use a subset of this data created by Ryan Whitcomb, \tt{rwhit94@vt.edu}, which contains data on 10,000 songs.  The data contains standard information about the songs such as artist name, title, and year released. Additionally, the data contains more advanced information; for example, the length of the song, how many musical bars long the song is, and how long the fade in to the song was.
+
+```{r read in data, message=FALSE, warning=FALSE}
+# Load music data
+music_data <- read_csv("data/music.csv")
+```
+
+### Problem 1: Inspection 
+
+First, inspect the data. You can use functions such as `glimpse`, `head`, `tail`, etc. to help you get a sense of what is contained in the data. 
+```{r, message=FALSE}
+
+glimpse(music_data) #condensed view of dataframe
+head(music_data) # first few observations of dataframe
+tail(music_data) #last few observations of dataframe
+dim(music_data) # dimensions of dataframe 
+
+```
+
+
+### Problem 2: Pose a Question
+
+Propose a question to guide your analysis. For example, you might ask if the average hotness scores of songs change over time? Or perhaps, what is the relationship between song duration and tempo? You can use one of these questions or develop your own. State which question you want to answer.
+
+What is song hotttnesss you ask? According to the dataset description, it is a measure of the song's popularity, when downloaded (in December 2010). And measured on a scale of 0 to 1.	
+
+## Questions 
+
+- _Which indie genres are most popular?_
+- _Where was the location of the artist's with the oldest recordings?_
+
+```{r, echo=TRUE}
+
+#create a tibble
+indie_pop_vs_rock <- music_data %>% 
+  filter(grepl('indie', artist.terms)) %>% # filter artist.terms column for "indie"
+  group_by(artist.terms) %>% #group the data by genre
+  mutate(arthot = max(artist.hotttnesss)) %>% 
+  mutate(song = max(song.hotttnesss)) %>% 
+  mutate(hotness = (song+arthot)) %>% 
+  select(artist.terms, hotness)
+  
+indie_plot <- distinct(indie_pop_vs_rock)
+
+# create new tibble
+oldest_song_location <- music_data %>% 
+  group_by(artist.name) %>% # group_by artist 
+  arrange(desc(-song.year)) %>%  # arrange by descending year
+  filter(artist.latitude > 1 & artist.longitude > 1 & song.year > 1) %>% #filter to remove 0 values
+  select(artist.name, song.year, artist.latitude, artist.longitude)
+         # select artist.latitude, artist.longitude 
+# head(data, 5) to get the top 5
+```
+
+
+### Problem 3: Visualization
+
+Create two visualizations to help gain insight into your question. Be sure to explain the visuals you create and what you take away from them.  
+```{r}
+
+# create a barchart to show Indie genre's measured by 
+# recurrence of genre across hot measurement within the dataset.
+ggplot(data = indie_plot) + 
+  geom_col(mapping = aes(x = artist.terms, y = hotness, fill = artist.terms)) +
+  labs(
+    title = "Which Indie genre is the most popular?",
+    x = "Indie Music Genres",
+    y = "Frequency of ",
+    fill = "Song Hott scale: -1  - 1 (hottest)")  
+    #scale_y_continuous(breaks = seq(-1, 0, 1))
+
+oldest_song_loc_5 <- head(oldest_song_location, 10) %>% 
+  unite("Artist_Year", artist.name:song.year, sep= "  ")
+#View(oldest_song_loc_5)
+world <- map_data("world")
+
+# Visual display of where in the world the top 10 
+# oldest songs from the list originated. 
+  ggplot() +
+  geom_map(
+    data = world, map = world,
+    aes(long, lat, map_id = region)) +
+  geom_point(data = oldest_song_loc_5,
+    aes(artist.longitude, artist.latitude, color = Artist_Year),
+    alpha = 2.7) +
+  theme_void() +
+    labs(
+    title = "Where in the world are the dataset's 10 oldest songs?",
+    color = "Artists & Song Year"
+    )
+
+```
+## Visualization Reflection
+
+- _What are the top genres of music that are the most "hott" (frequently listed) ?_
+The barchart visualization assesses which of the indie genres are the hottest within the dataset.  In reviewing the dataset, I noticed the volume of genres within the dataset was enormous and varied. This is what initially piqued my curiosity about which genre might be the top "hot" genre.  I originally looked at that data which could have directed me an entirely different direction. I then was curious about my favorite genre and how it was represented within the data.  I didn't want to narrow too far so I left it vague using the term "indie".  This worked well as there were only 61 observations.  Overall, I'm not suprised that indie rock itself was the most frequent and its hottness scale measurement is also not terribly surprising.  
+
+- _Where was the location of the artist's with the oldest recordings?_
+This map visual was the best way I could capture the question about location pertaining to the oldest recordings.  I was initially curious as to who and what were the oldest recordings in the dataset and after searching, was curious where they orginated. The geographical location for the artists shows that they all were originated from Europe.  I had somewhat expected at least a few of these artists to be from the U.S. so that was surprising. This does leave a desire to narrow the map in scale to only show Europe but that could also suggest a focus on only Europe when we are looking at the entire world. Ultimately, though its sparse, I kept the scale to the entire world. 
+
+### Citations
+
+Thierry Bertin-Mahieux, Daniel P.W. Ellis, Brian Whitman, and Paul Lamere.  The Million Song Dataset. In Proceedings of the 12th International Society for Music Information Retrieval Conference (ISMIR 2011), 2011.
+<http://millionsongdataset.com/>
+
+Code written above is from the previous course IMT 511 which used the below text to support class scripts.
+<https://www.google.com/books/edition/Programming_Skills_for_Data_Science/BnB6DwAAQBAJ?hl=en&gbpv=1&printsec=frontcover> 
+
+GGplot of Maps <https://datavizpyr.com/how-to-make-world-map-with-ggplot2-in-r/> 

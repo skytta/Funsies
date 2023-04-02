@@ -1,0 +1,1013 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "id": "44d26936",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#import library\n",
+    "import pandas as pd\n",
+    "import numpy as np\n",
+    "import matplotlib.pyplot as plt\n",
+    "import seaborn as sns\n",
+    "%matplotlib inline"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "id": "d0520cb8",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# define the function\n",
+    "def f(x):\n",
+    "    return x*x"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "id": "6305cb64",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# define gradient (function)\n",
+    "def grad(x):\n",
+    "    return 2*x"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "id": "9f4d4ba6",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "2.25"
+      ]
+     },
+     "execution_count": 26,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "x0 = -1.5\n",
+    "f(x0)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "id": "86251542",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "-3.0"
+      ]
+     },
+     "execution_count": 27,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "grad(x0)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "id": "6a241e88",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "-1.2"
+      ]
+     },
+     "execution_count": 28,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "alpha = 0.1\n",
+    "x1 = x0 - alpha*grad(x0)\n",
+    "x1"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "id": "b5b11250",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "-1.5\n",
+      "-1.2\n",
+      "-0.96\n",
+      "-0.768\n",
+      "-0.6144000000000001\n",
+      "-0.49152000000000007\n",
+      "-0.39321600000000007\n",
+      "-0.31457280000000004\n",
+      "-0.25165824000000003\n",
+      "-0.20132659200000003\n",
+      "final -0.16106127360000003\n"
+     ]
+    }
+   ],
+   "source": [
+    "# create a loop that moves opposite to gradient direction getting closer and closer to 0\n",
+    "# you can overshoot if your alpha (learning grade) is too big .1 or .01 are common \n",
+    "# this outputs x values along the x axis\n",
+    "x = -1.5\n",
+    "for i in range(10):\n",
+    "    print(x)\n",
+    "    x = x - alpha*grad(x)\n",
+    "print(\"final\", x)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 33,
+   "id": "c7c00298",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "x= -1.5000 y = 2.2500\n",
+      "x= -0.6000 y = 0.3600\n",
+      "x= -0.2400 y = 0.0576\n",
+      "x= -0.0960 y = 0.0092\n",
+      "x= -0.0384 y = 0.0015\n",
+      "x= -0.0154 y = 0.0002\n",
+      "x= -0.0061 y = 0.0000\n",
+      "x= -0.0025 y = 0.0000\n",
+      "x= -0.0010 y = 0.0000\n",
+      "x= -0.0004 y = 0.0000\n",
+      "final -0.00015728640000000016\n"
+     ]
+    }
+   ],
+   "source": [
+    "# this is outputting y values as well\n",
+    "alpha = 0.3\n",
+    "x = -1.5\n",
+    "for i in range(10):\n",
+    "    print(\"x= %6.4f\" % x, \"y = %6.4f\" % f(x))\n",
+    "    x = x - alpha*grad(x)\n",
+    "print(\"final\", x)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 36,
+   "id": "fd9e1d81",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>object</th>\n",
+       "      <th>ms</th>\n",
+       "      <th>R</th>\n",
+       "      <th>v</th>\n",
+       "      <th>mt</th>\n",
+       "      <th>Mt</th>\n",
+       "      <th>D</th>\n",
+       "      <th>Rmodern</th>\n",
+       "      <th>vModern</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>S.Mag.</td>\n",
+       "      <td>..</td>\n",
+       "      <td>0.032</td>\n",
+       "      <td>170</td>\n",
+       "      <td>1.5</td>\n",
+       "      <td>-16.0</td>\n",
+       "      <td>0.03</td>\n",
+       "      <td>0.061700</td>\n",
+       "      <td>158.1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>L.Mag.</td>\n",
+       "      <td>..</td>\n",
+       "      <td>0.030</td>\n",
+       "      <td>290</td>\n",
+       "      <td>0.5</td>\n",
+       "      <td>-17.2</td>\n",
+       "      <td>0.03</td>\n",
+       "      <td>0.049970</td>\n",
+       "      <td>278.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>N.G.C.6822</td>\n",
+       "      <td>..</td>\n",
+       "      <td>0.214</td>\n",
+       "      <td>-130</td>\n",
+       "      <td>9.0</td>\n",
+       "      <td>-12.7</td>\n",
+       "      <td>0.22</td>\n",
+       "      <td>0.500000</td>\n",
+       "      <td>-57.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>598</td>\n",
+       "      <td>..</td>\n",
+       "      <td>0.263</td>\n",
+       "      <td>-70</td>\n",
+       "      <td>7.0</td>\n",
+       "      <td>-15.1</td>\n",
+       "      <td>0.26</td>\n",
+       "      <td>0.840000</td>\n",
+       "      <td>-179.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>221</td>\n",
+       "      <td>..</td>\n",
+       "      <td>0.275</td>\n",
+       "      <td>-185</td>\n",
+       "      <td>8.8</td>\n",
+       "      <td>-13.4</td>\n",
+       "      <td>0.28</td>\n",
+       "      <td>0.763000</td>\n",
+       "      <td>-200.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>5</th>\n",
+       "      <td>224</td>\n",
+       "      <td>..</td>\n",
+       "      <td>0.275</td>\n",
+       "      <td>-220</td>\n",
+       "      <td>5.0</td>\n",
+       "      <td>-17.2</td>\n",
+       "      <td>0.28</td>\n",
+       "      <td>0.778000</td>\n",
+       "      <td>-301.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>6</th>\n",
+       "      <td>5457</td>\n",
+       "      <td>17</td>\n",
+       "      <td>0.450</td>\n",
+       "      <td>200</td>\n",
+       "      <td>9.9</td>\n",
+       "      <td>-13.3</td>\n",
+       "      <td>0.44</td>\n",
+       "      <td>6.400000</td>\n",
+       "      <td>241.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>7</th>\n",
+       "      <td>4736</td>\n",
+       "      <td>17.3</td>\n",
+       "      <td>0.500</td>\n",
+       "      <td>290</td>\n",
+       "      <td>8.4</td>\n",
+       "      <td>-15.1</td>\n",
+       "      <td>0.50</td>\n",
+       "      <td>4.910000</td>\n",
+       "      <td>308.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>8</th>\n",
+       "      <td>5194</td>\n",
+       "      <td>17.3</td>\n",
+       "      <td>0.500</td>\n",
+       "      <td>270</td>\n",
+       "      <td>7.4</td>\n",
+       "      <td>-16.1</td>\n",
+       "      <td>0.50</td>\n",
+       "      <td>9.509202</td>\n",
+       "      <td>463.2</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>9</th>\n",
+       "      <td>4449</td>\n",
+       "      <td>17.8</td>\n",
+       "      <td>0.630</td>\n",
+       "      <td>200</td>\n",
+       "      <td>9.5</td>\n",
+       "      <td>-14.5</td>\n",
+       "      <td>0.63</td>\n",
+       "      <td>3.600000</td>\n",
+       "      <td>204.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>10</th>\n",
+       "      <td>4214</td>\n",
+       "      <td>18.3</td>\n",
+       "      <td>0.800</td>\n",
+       "      <td>300</td>\n",
+       "      <td>11.3</td>\n",
+       "      <td>-13.2</td>\n",
+       "      <td>0.79</td>\n",
+       "      <td>3.100000</td>\n",
+       "      <td>291.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>11</th>\n",
+       "      <td>3031</td>\n",
+       "      <td>18.5</td>\n",
+       "      <td>0.900</td>\n",
+       "      <td>-30</td>\n",
+       "      <td>8.3</td>\n",
+       "      <td>-16.4</td>\n",
+       "      <td>0.87</td>\n",
+       "      <td>3.680982</td>\n",
+       "      <td>-33.9</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>12</th>\n",
+       "      <td>3627</td>\n",
+       "      <td>18.5</td>\n",
+       "      <td>0.900</td>\n",
+       "      <td>650</td>\n",
+       "      <td>9.1</td>\n",
+       "      <td>-15.7</td>\n",
+       "      <td>0.91</td>\n",
+       "      <td>9.600000</td>\n",
+       "      <td>696.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>13</th>\n",
+       "      <td>4826</td>\n",
+       "      <td>18.5</td>\n",
+       "      <td>0.900</td>\n",
+       "      <td>150</td>\n",
+       "      <td>9.0</td>\n",
+       "      <td>-15.7</td>\n",
+       "      <td>0.87</td>\n",
+       "      <td>5.300000</td>\n",
+       "      <td>410.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>14</th>\n",
+       "      <td>5236</td>\n",
+       "      <td>18.5</td>\n",
+       "      <td>0.900</td>\n",
+       "      <td>500</td>\n",
+       "      <td>10.4</td>\n",
+       "      <td>-14.4</td>\n",
+       "      <td>0.91</td>\n",
+       "      <td>4.500000</td>\n",
+       "      <td>508.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>15</th>\n",
+       "      <td>1068</td>\n",
+       "      <td>18.7</td>\n",
+       "      <td>1.000</td>\n",
+       "      <td>920</td>\n",
+       "      <td>9.1</td>\n",
+       "      <td>-15.9</td>\n",
+       "      <td>1.00</td>\n",
+       "      <td>14.400000</td>\n",
+       "      <td>1137.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>16</th>\n",
+       "      <td>5055</td>\n",
+       "      <td>19</td>\n",
+       "      <td>1.100</td>\n",
+       "      <td>450</td>\n",
+       "      <td>9.6</td>\n",
+       "      <td>-15.6</td>\n",
+       "      <td>1.10</td>\n",
+       "      <td>8.990000</td>\n",
+       "      <td>484.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>17</th>\n",
+       "      <td>7331</td>\n",
+       "      <td>19</td>\n",
+       "      <td>1.100</td>\n",
+       "      <td>500</td>\n",
+       "      <td>10.4</td>\n",
+       "      <td>-14.8</td>\n",
+       "      <td>1.10</td>\n",
+       "      <td>12.200000</td>\n",
+       "      <td>816.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>18</th>\n",
+       "      <td>4258</td>\n",
+       "      <td>19.5</td>\n",
+       "      <td>1.400</td>\n",
+       "      <td>500</td>\n",
+       "      <td>8.7</td>\n",
+       "      <td>-17.0</td>\n",
+       "      <td>1.38</td>\n",
+       "      <td>7.000000</td>\n",
+       "      <td>448.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>19</th>\n",
+       "      <td>4151</td>\n",
+       "      <td>20</td>\n",
+       "      <td>1.700</td>\n",
+       "      <td>960</td>\n",
+       "      <td>12.0</td>\n",
+       "      <td>-14.2</td>\n",
+       "      <td>1.74</td>\n",
+       "      <td>15.800000</td>\n",
+       "      <td>995.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>20</th>\n",
+       "      <td>4382</td>\n",
+       "      <td>..</td>\n",
+       "      <td>2.000</td>\n",
+       "      <td>500</td>\n",
+       "      <td>10.0</td>\n",
+       "      <td>-16.5</td>\n",
+       "      <td>2.00</td>\n",
+       "      <td>18.500000</td>\n",
+       "      <td>729.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>21</th>\n",
+       "      <td>4472</td>\n",
+       "      <td>..</td>\n",
+       "      <td>2.000</td>\n",
+       "      <td>850</td>\n",
+       "      <td>8.8</td>\n",
+       "      <td>-17.7</td>\n",
+       "      <td>2.00</td>\n",
+       "      <td>17.140000</td>\n",
+       "      <td>997.8</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>22</th>\n",
+       "      <td>4486</td>\n",
+       "      <td>..</td>\n",
+       "      <td>2.000</td>\n",
+       "      <td>800</td>\n",
+       "      <td>9.7</td>\n",
+       "      <td>-16.8</td>\n",
+       "      <td>2.00</td>\n",
+       "      <td>16.400000</td>\n",
+       "      <td>1284.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>23</th>\n",
+       "      <td>4649</td>\n",
+       "      <td>..</td>\n",
+       "      <td>2.000</td>\n",
+       "      <td>1090</td>\n",
+       "      <td>9.5</td>\n",
+       "      <td>-17.0</td>\n",
+       "      <td>2.00</td>\n",
+       "      <td>17.380000</td>\n",
+       "      <td>1108.0</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "        object    ms      R     v    mt    Mt     D    Rmodern  vModern\n",
+       "0       S.Mag.    ..  0.032   170   1.5 -16.0  0.03   0.061700    158.1\n",
+       "1       L.Mag.    ..  0.030   290   0.5 -17.2  0.03   0.049970    278.0\n",
+       "2   N.G.C.6822    ..  0.214  -130   9.0 -12.7  0.22   0.500000    -57.0\n",
+       "3          598    ..  0.263   -70   7.0 -15.1  0.26   0.840000   -179.0\n",
+       "4          221    ..  0.275  -185   8.8 -13.4  0.28   0.763000   -200.0\n",
+       "5          224    ..  0.275  -220   5.0 -17.2  0.28   0.778000   -301.0\n",
+       "6         5457    17  0.450   200   9.9 -13.3  0.44   6.400000    241.0\n",
+       "7         4736  17.3  0.500   290   8.4 -15.1  0.50   4.910000    308.0\n",
+       "8         5194  17.3  0.500   270   7.4 -16.1  0.50   9.509202    463.2\n",
+       "9         4449  17.8  0.630   200   9.5 -14.5  0.63   3.600000    204.0\n",
+       "10        4214  18.3  0.800   300  11.3 -13.2  0.79   3.100000    291.0\n",
+       "11        3031  18.5  0.900   -30   8.3 -16.4  0.87   3.680982    -33.9\n",
+       "12        3627  18.5  0.900   650   9.1 -15.7  0.91   9.600000    696.0\n",
+       "13        4826  18.5  0.900   150   9.0 -15.7  0.87   5.300000    410.0\n",
+       "14        5236  18.5  0.900   500  10.4 -14.4  0.91   4.500000    508.0\n",
+       "15        1068  18.7  1.000   920   9.1 -15.9  1.00  14.400000   1137.0\n",
+       "16        5055    19  1.100   450   9.6 -15.6  1.10   8.990000    484.0\n",
+       "17        7331    19  1.100   500  10.4 -14.8  1.10  12.200000    816.0\n",
+       "18        4258  19.5  1.400   500   8.7 -17.0  1.38   7.000000    448.0\n",
+       "19        4151    20  1.700   960  12.0 -14.2  1.74  15.800000    995.0\n",
+       "20        4382    ..  2.000   500  10.0 -16.5  2.00  18.500000    729.0\n",
+       "21        4472    ..  2.000   850   8.8 -17.7  2.00  17.140000    997.8\n",
+       "22        4486    ..  2.000   800   9.7 -16.8  2.00  16.400000   1284.0\n",
+       "23        4649    ..  2.000  1090   9.5 -17.0  2.00  17.380000   1108.0"
+      ]
+     },
+     "execution_count": 36,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "hubble = pd.read_csv('/Users/jennyskytta/Desktop/hubble.csv', sep=\"\\t\")\n",
+    "hubble"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 37,
+   "id": "fed9d423",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<matplotlib.collections.PathCollection at 0x7fb792909700>"
+      ]
+     },
+     "execution_count": 37,
+     "metadata": {},
+     "output_type": "execute_result"
+    },
+    {
+     "data": {
+      "image/png": "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\n",
+      "text/plain": [
+       "<Figure size 432x288 with 1 Axes>"
+      ]
+     },
+     "metadata": {
+      "needs_background": "light"
+     },
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "plt.scatter(hubble.R, hubble.v)\n",
+    "# this shows us that the universe is expanding and these used to all be together "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 38,
+   "id": "ce4351f1",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0     0.032\n",
+       "1     0.030\n",
+       "2     0.214\n",
+       "3     0.263\n",
+       "4     0.275\n",
+       "5     0.275\n",
+       "6     0.450\n",
+       "7     0.500\n",
+       "8     0.500\n",
+       "9     0.630\n",
+       "10    0.800\n",
+       "11    0.900\n",
+       "12    0.900\n",
+       "13    0.900\n",
+       "14    0.900\n",
+       "15    1.000\n",
+       "16    1.100\n",
+       "17    1.100\n",
+       "18    1.400\n",
+       "19    1.700\n",
+       "20    2.000\n",
+       "21    2.000\n",
+       "22    2.000\n",
+       "23    2.000\n",
+       "Name: R, dtype: float64"
+      ]
+     },
+     "execution_count": 38,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# calculate SSE Sum of Square Error\n",
+    "# SSE(m,c)= E(yi-yhat)^2\n",
+    "# pick two values and calculate SSE \n",
+    "# predicted velocity = slope * distince + intercept (m*R + c)\n",
+    "#hat means predicted vhat is predicted velocity \n",
+    "\n",
+    "m0 = 1 # value for slope\n",
+    "c0 = 0 # value for intercept\n",
+    "\n",
+    "vhat = m0*hubble.R + c0\n",
+    "vhat"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 40,
+   "id": "b26d0e7c",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "6486429.447539"
+      ]
+     },
+     "execution_count": 40,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "np.sum((hubble.v - vhat)**2)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "f89f1f1f",
+   "metadata": {},
+   "source": [
+    "### Sum of Square Errors"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 61,
+   "id": "bfe63417",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "6486429.447539"
+      ]
+     },
+     "execution_count": 61,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "vhat = m0*hubble.R + c0\n",
+    "np.sum((hubble.v - vhat)**2)\n",
+    "\n",
+    "def sse(theta):\n",
+    "    m = theta[0]\n",
+    "    c = theta[1]\n",
+    "    vhat = m*hubble.R + c\n",
+    "    sse = np.sum((hubble.v - vhat)**2)\n",
+    "    return sse\n",
+    "sse(np.array([1,0]))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 81,
+   "id": "de6ffff8",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([-24966.034922, -17866.262   ])"
+      ]
+     },
+     "execution_count": 81,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# define SSE\n",
+    "# we see the output is the same as our previous SSE line above\n",
+    "# error multipled by distance (e*hubble.R)\n",
+    "# axis tells it to be left and right\n",
+    "#.values makes this into matrix \n",
+    "#.sum tells us we have two columns\n",
+    "# vector contains two variables: slope and intercept\n",
+    "\n",
+    "def grad(theta):\n",
+    "    m = theta[0]\n",
+    "    c = theta[1]\n",
+    "    vhat = m*hubble.R + c  # predicted velocity \n",
+    "    e = hubble.v - vhat  #error equals..\n",
+    "    grad = -2*pd.concat((e*hubble.R, e), axis=1).values.sum(axis=0) # gradient formula \n",
+    "    return grad\n",
+    "\n",
+    "grad(np.array([1,0]))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 65,
+   "id": "719df35e",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "m0 = 1\n",
+    "c0 = 0\n",
+    "# put slope and intercept into a single vector\n",
+    "theta0 = np.array([m0, c0])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 67,
+   "id": "a583b077",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([24966.034922, 17866.262   ])"
+      ]
+     },
+     "execution_count": 67,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "alpha = 0.1\n",
+    "grad(theta0)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 55,
+   "id": "65b4ca56",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([-2496.6034922, -1786.6262   ])"
+      ]
+     },
+     "execution_count": 55,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "-alpha*grad(theta0) #step downhill"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 59,
+   "id": "f7a9c6ba",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([-2495.6034922, -1786.6262   ])"
+      ]
+     },
+     "execution_count": 59,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "theta1 = theta0 - alpha*grad(theta0)\n",
+    "theta1"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 68,
+   "id": "485ef716",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "556422750.9836766"
+      ]
+     },
+     "execution_count": 68,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "sse(theta1) # calculted a new SSE and is this better or worse than our original "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 69,
+   "id": "7629148d",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "6486429.447539"
+      ]
+     },
+     "execution_count": 69,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "sse(theta0) # this number is higher showing we are going uphill instead of downhill\n",
+    "# lets try a smaller alpha "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 83,
+   "id": "61bf762d",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[250.66034922 178.66262   ]\n",
+      "1618224.2695295308\n"
+     ]
+    }
+   ],
+   "source": [
+    "alpha = 0.01\n",
+    "theta1 = theta0 - alpha*grad(theta0)\n",
+    "print(theta1)\n",
+    "print(sse(theta1))\n",
+    "\n",
+    "# if I get a smaller SSE number, I am good"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 90,
+   "id": "f289e978",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "theta: [1 0] sse = 6486429.4475\n",
+      "theta: [250.66034922 178.66262   ] sse = 1618224.2695\n",
+      "theta: [274.79005981 162.37073886] sse = 1539819.8134\n",
+      "theta: [291.8005199  143.34510785] sse = 1477760.0994\n",
+      "theta: [307.0902721  126.01174469] sse = 1426857.5300\n",
+      "theta: [320.93497355 110.31096402] sse = 1385105.2042\n",
+      "theta: [333.47365214  96.09116256] sse = 1350858.2739\n",
+      "theta: [344.82956881  83.21269856] sse = 1322767.5698\n",
+      "theta: [355.1142938   71.54904645] sse = 1299726.4490\n",
+      "theta: [364.42887153  60.98561433] sse = 1280827.1987\n",
+      "theta: [372.86481497  51.41861962] sse = 1265325.2765\n",
+      "theta: [380.50500477  42.75406943] sse = 1252609.9789\n",
+      "theta: [387.42450352  34.90683712] sse = 1242180.3824\n",
+      "theta: [393.69129326  27.79982595] sse = 1233625.6096\n",
+      "theta: [399.36694333  21.36321165] sse = 1226608.6422\n",
+      "theta: [404.50721532  15.53375638] sse = 1220853.0444\n",
+      "theta: [409.16261087  10.25418748] sse = 1216132.0726\n",
+      "theta: [413.37886787   5.47263475] sse = 1212259.7424\n",
+      "final [417.1974098    1.14212084]\n"
+     ]
+    }
+   ],
+   "source": [
+    "# cost function is now SSE\n",
+    "# this is essence of gradient descent\n",
+    "# this can be our final formula \n",
+    "alpha = 0.01\n",
+    "theta = np.array([1,0])  # this is our initial parameter containing our slope and intercept\n",
+    "\n",
+    "for i in range(18):\n",
+    "    print(\"theta:\", theta, \"sse = %6.4f\" % sse(theta))\n",
+    "    theta = theta - alpha*grad(theta)\n",
+    "print(\"final\", theta)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 91,
+   "id": "b02dc0e0",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "x0 = 4\n",
+      "f(x0) = 16\n",
+      "grad(x0) = 8\n",
+      "x1 = 0.7999999999999998\n",
+      "f(x1) = 0.6399999999999997\n",
+      "grad(x1) = 1.5999999999999996\n",
+      "\n",
+      "x = 0.8000\n",
+      "f(x) = 0.6400\n",
+      "grad(x) = 1.6000\n",
+      "\n",
+      "x = 0.1600\n",
+      "f(x) = 0.0256\n",
+      "grad(x) = 0.3200\n",
+      "\n",
+      "x = 0.0320\n",
+      "f(x) = 0.0010\n",
+      "grad(x) = 0.0640\n",
+      "\n",
+      "x = 0.0064\n",
+      "f(x) = 0.0000\n",
+      "grad(x) = 0.0128\n",
+      "\n",
+      "x = 0.0013\n",
+      "f(x) = 0.0000\n",
+      "grad(x) = 0.0026\n",
+      "\n",
+      "x = 0.0003\n",
+      "f(x) = 0.0000\n",
+      "grad(x) = 0.0005\n"
+     ]
+    }
+   ],
+   "source": [
+    "def f(x):\n",
+    "    return x*x\n",
+    "\n",
+    "def grad(x):\n",
+    "    return 2*x\n",
+    "\n",
+    "x0 = 4\n",
+    "print(\"x0 =\", x0)\n",
+    "print(\"f(x0) =\", f(x0))\n",
+    "print(\"grad(x0) =\", grad(x0))\n",
+    "\n",
+    "alpha = 0.4\n",
+    "\n",
+    "x1 = x0 - alpha*grad(x0)\n",
+    "print(\"x1 =\", x1)\n",
+    "print(\"f(x1) =\", f(x1))\n",
+    "print(\"grad(x1) =\", grad(x1))\n",
+    "\n",
+    "x = x0\n",
+    "while np.abs(grad(x)) > 0.001:\n",
+    "    x = x - alpha*grad(x)\n",
+    "    print(\"\\nx = %6.4f\" % x)\n",
+    "    print(\"f(x) = %6.4f\" % f(x))\n",
+    "    print(\"grad(x) = %6.4f\" % grad(x))"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.9.12"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
